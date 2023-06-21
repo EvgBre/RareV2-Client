@@ -1,8 +1,8 @@
 {
-  "name": "rarev2-client",
+  "name": "rarev2-project",
   "private": true,
   "version": "1.0.0",
-  "author": "DeCorrean Davis",
+  "author": "Evan Breland",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
