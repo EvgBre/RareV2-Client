@@ -51,8 +51,8 @@ const PostForm = ({ obj }) => {
       const postUpdate = {
         id: obj.id,
         title: currentPost.title,
-        imageUrl: currentPost.image_url,
-        publicationDate: currentPost.publication_date,
+        imageUrl: currentPost.imageUrl,
+        publicationDate: currentPost.publicationDate,
         content: currentPost.content,
         rareUserId: user.uid,
       };
@@ -62,8 +62,8 @@ const PostForm = ({ obj }) => {
     } else {
       const posts = {
         title: currentPost.title,
-        imageUrl: currentPost.image_url,
-        publicationDate: currentPost.publication_date,
+        imageUrl: currentPost.imageUrl,
+        publicationDate: currentPost.publicationDate,
         content: currentPost.content,
         rareUserId: user.uid,
       };
