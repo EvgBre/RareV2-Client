@@ -46,19 +46,18 @@ const updatePost = (post) => new Promise((resolve, reject) => {
     },
     body: JSON.stringify(post),
   })
-    .then((response) => response.json())
     .then((data) => resolve(data))
     .catch(reject);
 });
 
-const deletePost = (post) => new Promise((resolve, reject) => {
-  fetch(`${clientCredentials.databaseURL}/posts/${post}`, {
+const deletePost = (id) => new Promise((resolve, reject) => {
+  fetch(`${clientCredentials.databaseURL}/posts/${id}`, {
     method: 'DELETE',
     headers: {
-      'Content-Type': 'application.json',
+      'Content-Type': 'application/json',
     },
   })
-    .then((data) => resolve(data))
+    .then(resolve)
     .catch(reject);
 });
 
