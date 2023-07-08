@@ -20,15 +20,10 @@ const getUsers = () => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
-const getSingleUser = (uid) => new Promise((resolve, reject) => {
-  fetch(`${clientCredentials.databaseURL}/users/${uid}.json`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
+const getSingleUser = (id) => new Promise((resolve, reject) => {
+  fetch(`${clientCredentials.databaseURL}/users/${id}`)
     .then((response) => response.json())
-    .then((data) => resolve((data)))
+    .then(resolve)
     .catch(reject);
 });
 
@@ -45,21 +40,21 @@ const createUser = (payload) => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
-const updateUser = (payload) => new Promise((resolve, reject) => {
-  fetch(`${endpoint}/users/${payload.uid}.json`, {
-    method: 'PATCH',
+const updateUser = (user, uid) => new Promise((resolve, reject) => {
+  fetch(`${clientCredentials.databaseURL}/users/${user.id}`, {
+    method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `${uid}`,
     },
-    body: JSON.stringify(payload),
+    body: JSON.stringify(user),
   })
-    .then((response) => response.json())
-    .then((data) => resolve((data)))
+    .then((data) => resolve(data))
     .catch(reject);
 });
 
 const deleteUser = (uid) => new Promise((resolve, reject) => {
-  fetch(`${endpoint}/users/${uid}.json`, {
+  fetch(`${clientCredentials.databaseURL}/users/${uid}.json`, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
@@ -70,15 +65,15 @@ const deleteUser = (uid) => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
-const getUserPosts = (uid) => new Promise((resolve, reject) => {
-  fetch(`${endpoint}/posts.json?orderBy="uid"&equalTo="${uid}"`, {
+const getUserPosts = (id) => new Promise((resolve, reject) => {
+  fetch(`${clientCredentials.databaseURL}/posts?rare_user_id=${id}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'applications.json',
     },
   })
     .then((response) => response.json())
-    .then((data) => resolve(Object.values(data)))
+    .then((data) => resolve(data)) // will resolve a single object
     .catch(reject);
 });
 
