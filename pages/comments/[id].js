@@ -5,7 +5,7 @@ import { getCommentsByPostId } from '../../utils/data/commentData';
 import CommentCard from '../../components/comment/CommentCard';
 
 export default function ViewComment() {
-  const [commentDetails, setCommentDetails] = useState({});
+  const [commentDetails, setCommentDetails] = useState([]);
   const router = useRouter();
   const { id } = router.query;
 
@@ -15,7 +15,7 @@ export default function ViewComment() {
 
   useEffect(() => {
     showComments();
-  }, []);
+  }, [id]);
 
   return (
     <article className="comments">

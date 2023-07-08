@@ -28,6 +28,12 @@ function Home() {
       {posts.map((post) => (
         <section key={`post--${post.id}`} className="post">
           <PostCard id={post.id} title={post.title} content={post.content} imageUrl={post.image_url} publicationDate={post.publication_date} onUpdate={showPosts} />
+          <Button onClick={() => {
+            router.push(`/comments/${post.id}`);
+          }}
+          >
+            View Comments
+          </Button>
         </section>
       ))}
     </article>
