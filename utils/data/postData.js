@@ -46,22 +46,36 @@ const updatePost = (post) => new Promise((resolve, reject) => {
     },
     body: JSON.stringify(post),
   })
-    .then((response) => response.json())
     .then((data) => resolve(data))
     .catch(reject);
 });
 
-const deletePost = (post) => new Promise((resolve, reject) => {
-  fetch(`${clientCredentials.databaseURL}/posts/${post}`, {
-    method: 'DELETE',
+const getUserForPosts = (uid) => new Promise((resolve, reject) => {
+  fetch(`${clientCredentials.databaseURL}/users`, {
+    method: 'GET',
     headers: {
-      'Content-Type': 'application.json',
+      'Content-Type': 'application/json',
     },
   })
-    .then((data) => resolve(data))
+    .then((response) => response.json())
+    .then((data) => {
+      const userForPosts = Object.values(data).filter((item) => item.uid === uid);
+      resolve(userForPosts);
+    })
+    .catch(reject);
+});
+
+const deletePost = (id) => new Promise((resolve, reject) => {
+  fetch(`${clientCredentials.databaseURL}/posts/${id}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+    .then(resolve)
     .catch(reject);
 });
 
 export {
-  getPosts, getSinglePost, deletePost, updatePost, createPost,
+  getPosts, getSinglePost, deletePost, updatePost, createPost, getUserForPosts,
 };

@@ -13,14 +13,18 @@ const PostCard = ({
   imageUrl,
   publicationDate,
   content,
-  OnUpdate,
 }) => {
   // const { user } = useAuth();
   const router = useRouter();
 
   const deleteThisPost = () => {
     if (window.confirm('Delete Post?')) {
-      deletePost(id).then(() => OnUpdate());
+      deletePost(id).then(() => {
+        // Perform any necessary actions after deleting the post
+        // eslint-disable-next-line no-console
+
+        ('Post deleted');
+      });
     }
   };
   return (
@@ -51,7 +55,6 @@ PostCard.propTypes = {
   publicationDate: PropTypes.string.isRequired,
   content: PropTypes.string.isRequired,
   imageUrl: PropTypes.string.isRequired,
-  OnUpdate: PropTypes.func.isRequired,
 };
 
 export default PostCard;
