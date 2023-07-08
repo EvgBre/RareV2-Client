@@ -13,30 +13,28 @@ function Home() {
   };
   useEffect(() => {
     showPosts();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
-    <article className="posts">
-      <h1>Posts</h1>
-      <Button
-        onClick={() => {
-          router.push('/post/new');
-        }}
-      >
-        Register New Post
-      </Button>
-      {posts.map((post) => (
-        <section key={`post--${post.id}`} className="post">
-          <PostCard id={post.id} title={post.title} content={post.content} imageUrl={post.image_url} publicationDate={post.publication_date} onUpdate={showPosts} />
-          <Button onClick={() => {
-            router.push(`/comments/${post.id}`);
+    <>
+      <article className="posts">
+        <h1>Posts</h1>
+
+        <Button
+          onClick={() => {
+            router.push('/post/new');
           }}
-          >
-            View Comments
-          </Button>
-        </section>
-      ))}
-    </article>
+        >
+          Register New Post
+        </Button>
+        {posts.map((post) => (
+          <section key={`post--${post.id}`} className="post">
+            <PostCard id={post.id} title={post.title} content={post.content} imageUrl={post.image_url} publicationDate={post.publication_date} onUpdate={showPosts} />
+          </section>
+        ))}
+      </article>
+    </>
   );
 }
 

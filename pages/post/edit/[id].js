@@ -10,9 +10,7 @@ export default function EditPostPage() {
   const { id } = router.query;
 
   useEffect(() => {
-    getSinglePost(id).then((obj) => {
-      setEditPost(obj);
-    });
+    getSinglePost(id).then(setEditPost);
   }, [id]);
   return (
     <>
