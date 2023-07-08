@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+import Head from 'next/head';
 import CommentForm from '../../components/comment/CommentForm';
 
 export default function NewEvent() {
@@ -7,7 +8,9 @@ export default function NewEvent() {
 
   return (
     <div>
-      <h2>Create Comment</h2>
+      <Head>
+        Create Comment
+      </Head>
       <CommentForm postId={postId} />
     </div>
   );
