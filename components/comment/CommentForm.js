@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { useAuth } from '../../utils/context/authContext';
-import { updateComment } from '../../utils/data/commentData';
+import { createComment, updateComment } from '../../utils/data/commentData';
 
 const CommentForm = ({ obj, postId }) => {
   const { user } = useAuth();
@@ -19,7 +19,7 @@ const CommentForm = ({ obj, postId }) => {
     if (obj.id) {
       setComment({
         id: obj.id,
-        authorId: obj.author_id,
+        authorId: obj.authorId,
         postId: obj.post_id,
         content: obj.content,
         createdOn: obj.created_on,
@@ -48,7 +48,11 @@ const CommentForm = ({ obj, postId }) => {
         createdOn: comment.created_on,
       };
 
-      updateComment(commentUpdate).then(() => router.push(`/comments/${comment.post_id}`));
+      updateComment(commentUpdate).then(() => router.push(`/comments/${comment.postId.id}`));
+    } else {
+      // Call the createComment function and handle the response
+      createComment(comment)
+        .then((comments) => router.push(`/comments/${comments.post_id.id}`));
     }
   };
 
@@ -57,8 +61,14 @@ const CommentForm = ({ obj, postId }) => {
       <Form onSubmit={handleSubmit}>
         <h2 className="text-white mt-5">{obj.id ? 'Update' : 'Create'} Comment</h2>
         <Form.Group className="mb-3">
-          <Form.Label>Content</Form.Label>
-          <Form.Control name="content" required value={comment.content} onChange={handleChange} />
+          <Form.Control
+            type="text"
+            placeholder="Enter a comment"
+            name="content"
+            value={comment.content || ''}
+            onChange={handleChange}
+            required
+          />
         </Form.Group>
         <Button variant="primary" type="submit">
           Submit
@@ -71,7 +81,11 @@ const CommentForm = ({ obj, postId }) => {
 CommentForm.propTypes = {
   obj: PropTypes.shape({
     id: PropTypes.number,
-    author_id: PropTypes.number,
+    authorId: PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      first_name: PropTypes.string.isRequired,
+      last_name: PropTypes.string.isRequired,
+    }).isRequired,
     post_id: PropTypes.number,
     content: PropTypes.string,
     created_on: PropTypes.string,
@@ -81,7 +95,7 @@ CommentForm.propTypes = {
 
 CommentForm.defaultProps = {
   obj: {},
-  postId: 0,
+  postId: '',
 };
 
 export default CommentForm;
