@@ -40,6 +40,13 @@ const PostCard = ({
       </Card.Body>
       <Button
         onClick={() => {
+          router.push(`/post/${id}`);
+        }}
+      >
+        View Post
+      </Button>
+      <Button
+        onClick={() => {
           router.push(`/post/edit/${id}`);
         }}
       >

@@ -20,7 +20,7 @@ const CommentCard = ({
 
   const router = useRouter();
   const { user } = useAuth();
-  const [setRareUser] = useState({});
+  const [rareUser, setRareUser] = useState({});
 
   useEffect(() => {
     getUserForComments(user.uid).then((data) => {
@@ -37,15 +37,18 @@ const CommentCard = ({
         </Card.Body>
         <Card.Footer>Created On: {createdOn}
         </Card.Footer>
-        <>
-          <Button onClick={() => {
-            router.push(`edit/${id}`);
-          }}
-          >Edit
-          </Button>
-          <Button onClick={deleteThisComment}>Delete
-          </Button>
-        </>
+        { rareUser.uid === authorId.uid
+          ? (
+            <>
+              <Button onClick={() => {
+                router.push(`/comments/edit/${id}`);
+              }}
+              >Edit
+              </Button>
+              <Button onClick={deleteThisComment}>Delete
+              </Button>
+            </>
+          ) : ''}
       </Card>
     </>
   );
@@ -57,6 +60,7 @@ CommentCard.propTypes = {
     id: PropTypes.number.isRequired,
     first_name: PropTypes.string.isRequired,
     last_name: PropTypes.string.isRequired,
+    uid: PropTypes.string.isRequired,
   }).isRequired,
   content: PropTypes.string.isRequired,
   createdOn: PropTypes.string.isRequired,
