@@ -23,7 +23,7 @@ export default function NavBar() {
             <Link passHref href="/users">
               <Nav.Link style={{ color: '#d8e2dc', marginLeft: '20px' }}>All Users</Nav.Link>
             </Link>
-            <Link passHref href="/posts/allPosts">
+            <Link passHref href="/post">
               <Nav.Link style={{ color: '#d8e2dc', marginLeft: '20px' }}>All Posts</Nav.Link>
             </Link>
             <Link passHref href="/posts/myPosts">
