@@ -50,6 +50,21 @@ const updatePost = (post) => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
+const getUserForPosts = (uid) => new Promise((resolve, reject) => {
+  fetch(`${clientCredentials.databaseURL}/users`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      const userForPosts = Object.values(data).filter((item) => item.uid === uid);
+      resolve(userForPosts);
+    })
+    .catch(reject);
+});
+
 const deletePost = (id) => new Promise((resolve, reject) => {
   fetch(`${clientCredentials.databaseURL}/posts/${id}`, {
     method: 'DELETE',
@@ -62,5 +77,5 @@ const deletePost = (id) => new Promise((resolve, reject) => {
 });
 
 export {
-  getPosts, getSinglePost, deletePost, updatePost, createPost,
+  getPosts, getSinglePost, deletePost, updatePost, createPost, getUserForPosts,
 };
