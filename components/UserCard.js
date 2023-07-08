@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import Card from 'react-bootstrap/Card';
 import { Button } from 'react-bootstrap';
 import { useRouter } from 'next/router';
+import { useAuth } from '../utils/context/authContext';
 
 const UserCard = ({
   id,
@@ -12,15 +13,17 @@ const UserCard = ({
   profile_image_url,
   created_on,
   email,
-  onUpdate,
+  uid,
 }) => {
   const router = useRouter();
-
-  const deleteUser = () => {
-    if (window.confirm('Delete user?')) {
-      deleteUser(id).then(() => onUpdate());
-    }
+  const { user } = useAuth();
+  const payload = {
+    createdOn: '2023-06-14',
+    endedOn: '2023-06-14',
+    authorId: `${user.uid}`,
+    followId: `${uid}`,
   };
+  console.warn(payload);
 
   return (
     <Card className="text-center" style={{ width: '200px' }}>
@@ -35,21 +38,13 @@ const UserCard = ({
       <div className="d-flex">
         <Button
           onClick={() => {
-            router.push(`/users/edit/${id}`);
+            router.push(`/users/${id}`);
           }}
           style={{
             margin: '10px', backgroundColor: '#6699CC', fontSize: '10px', width: '75px',
           }}
         >
-          Edit User
-        </Button>
-        <Button
-          onClick={deleteUser}
-          style={{
-            margin: '10px', backgroundColor: '#6699CC', fontSize: '10px', width: '75px',
-          }}
-        >
-          Delete
+          View
         </Button>
       </div>
 
@@ -64,7 +59,7 @@ UserCard.propTypes = {
   profile_image_url: PropTypes.string.isRequired,
   created_on: PropTypes.number.isRequired,
   email: PropTypes.number.isRequired,
-  onUpdate: PropTypes.func.isRequired,
+  uid: PropTypes.func.isRequired,
 };
 
 export default UserCard;

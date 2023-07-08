@@ -1,103 +1,97 @@
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import { useRouter } from 'next/router';
 import { registerUser } from '../utils/auth'; // Update with path to registerUser
+import { getSingleUser, updateUser } from '../utils/data/userData';
 
-function RegisterForm({ user, updateUser }) {
-  const [formData, setFormData] = useState({
-    first_name: '',
-    last_name: '',
+function RegisterForm({ user, updateRareUser }) {
+  const initialState = {
+    firstName: '',
+    lastName: '',
     bio: '',
-    profile_image_url: '',
     email: '',
-    active: true,
+    profileImageUrl: '',
     uid: user.uid,
-  });
+  };
 
-  const handleInputChange = (e) => {
+  const [formData, setFormData] = useState(initialState);
+  const router = useRouter();
+  const { id } = router.query;
+
+  useEffect(() => {
+    if (user.uid) {
+      getSingleUser(id).then((userObj) => {
+        setFormData((prevState) => ({
+          ...prevState,
+          id: userObj.id,
+          firstName: userObj.first_name,
+          lastName: userObj.last_name,
+          bio: userObj.bio,
+          email: userObj.email,
+          profileImageUrl: userObj.profile_image_url,
+        }));
+        console.warn(userObj);
+      });
+    }
+  }, [user, id]);
+
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
+    setFormData((prevState) => ({
+      ...prevState,
       [name]: value,
     }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const currentDate = new Date().toISOString().split('T')[0]; // Get the current date
-    const updatedFormData = { ...formData, created_on: currentDate };
-    registerUser(updatedFormData)
-      .then(() => updateUser(user.uid));
+    if (formData.id) {
+      const User = {
+        id: formData.id,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        bio: formData.bio,
+        email: formData.email,
+        profileImageUrl: formData.profileImageUrl,
+        uid: user.uid,
+      };
+      updateUser(User, user.uid).then(() => router.push(`/users/${id}`));
+    } else {
+      registerUser(formData).then(() => updateRareUser(user.uid));
+    }
   };
 
   return (
-    <Form
-      onSubmit={handleSubmit}
-      className="text-center d-flex flex-column justify-content-center align-content-center"
-      style={{
-        height: '90vh',
-        padding: '30px',
-        maxWidth: '500px',
-        margin: '0 auto',
-      }}
-    >
-
-      <Form.Group className="mb-3">
+    <Form onSubmit={handleSubmit}>
+      <Form.Group className="mb-3" controlId="formBasicEmail">
         <Form.Label>First Name</Form.Label>
-        <Form.Control
-          name="first_name"
-          required
-          value={formData.first_name}
-          onChange={handleInputChange}
-        />
+        <Form.Control as="textarea" name="firstName" required value={formData.firstName} onChange={handleChange} />
+        <Form.Text className="text-muted" />
       </Form.Group>
-
-      <Form.Group className="mb-3">
+      <Form.Group className="mb-3" controlId="formBasicEmail">
         <Form.Label>Last Name</Form.Label>
-        <Form.Control
-          name="last_name"
-          required
-          value={formData.last_name}
-          onChange={handleInputChange}
-        />
+        <Form.Control as="textarea" name="lastName" required value={formData.lastName} onChange={handleChange} />
+        <Form.Text className="text-muted" />
       </Form.Group>
-
-      <Form.Group className="mb-3" controlId="formBio">
-        <Form.Label>User Bio</Form.Label>
-        <Form.Control
-          as="textarea"
-          name="bio"
-          required
-          placeholder="Enter your Bio"
-          value={formData.bio}
-          onChange={handleInputChange}
-        />
-        <Form.Text className="text-muted">Let other users know a little bit about you...</Form.Text>
+      <Form.Group className="mb-3" controlId="formBasicEmail">
+        <Form.Label>Bio</Form.Label>
+        <Form.Control as="textarea" name="bio" required value={formData.bio} onChange={handleChange} />
+        <Form.Text className="text-muted" />
       </Form.Group>
-
-      <Form.Group className="mb-3">
-        <Form.Label>Profile Image Url</Form.Label>
-        <Form.Control
-          name="profile_image_url"
-          required
-          value={formData.profile_image_url}
-          onChange={handleInputChange}
-        />
+      <Form.Group className="mb-3" controlId="formBasicEmail">
+        <Form.Label>Email Address</Form.Label>
+        <Form.Control type="email" name="email" required value={formData.email} onChange={handleChange} />
+        <Form.Text className="text-muted" />
       </Form.Group>
-
-      <Form.Group className="mb-3">
-        <Form.Label>Email</Form.Label>
-        <Form.Control
-          name="email"
-          required
-          value={formData.email}
-          onChange={handleInputChange}
-        />
+      <Form.Group className="mb-3" controlId="formBasicEmail">
+        <Form.Label>Profile Image</Form.Label>
+        <Form.Control type="url" name="profileImageUrl" required value={formData.profileImageUrl} onChange={handleChange} />
+        <Form.Text className="text-muted" />
       </Form.Group>
-
-      <Button variant="primary" type="submit" style={{ backgroundColor: '#003049', marginTop: '20px' }}>
-        Register
+      <Button variant="primary" type="submit">
+        Submit
       </Button>
     </Form>
   );
@@ -107,7 +101,11 @@ RegisterForm.propTypes = {
   user: PropTypes.shape({
     uid: PropTypes.string.isRequired,
   }).isRequired,
-  updateUser: PropTypes.func.isRequired,
+  updateRareUser: PropTypes.func,
+};
+
+RegisterForm.defaultProps = {
+  updateRareUser: () => {},
 };
 
 export default RegisterForm;
