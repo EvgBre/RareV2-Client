@@ -10,12 +10,15 @@ const initialState = {
   imageUrl: '',
   publicationDate: '',
   content: '',
+  tags: '',
 };
 
 const PostForm = ({ obj }) => {
   const [currentPost, SetCurrentPost] = useState(initialState);
   const router = useRouter();
   const { user } = useAuth();
+  const { id } = router.query;
+  const [formInput, setFormInput] = useState({ ...initialState, postId: id });
 
   useEffect(() => {
     if (obj.id) {
@@ -32,6 +35,12 @@ const PostForm = ({ obj }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    setFormInput((prevState) => ({
+
+      // TAKES WHATEVER THE PREVIOUS VALUE WAS.
+      ...prevState,
+      [name]: value,
+    }));
 
     if (name === 'rareUserId' && !Number.isInteger(Number(value))) {
       return;
@@ -93,11 +102,85 @@ const PostForm = ({ obj }) => {
           <Form.Label>Date Created</Form.Label>
           <Form.Control name="publicationDate" required value={currentPost.publicationDate} onChange={handleChange} type="string" />
         </Form.Group>
+        <Form.Check
+          className="text-black mb-3"
+          style={{ margin: '10px' }}
+          type="checkbox"
+          id="checkbox"
+          name="news"
+          label="News"
+          checked={formInput.news}
+          onChange={(e) => {
+            setFormInput((prevState) => ({
+              ...prevState,
+              news: e.target.checked,
+            }));
+          }}
+        />
+        <Form.Check
+          className="text-black mb-3"
+          style={{ margin: '10px' }}
+          type="checkbox"
+          id="checkbox"
+          name="funny"
+          label="Funny"
+          checked={formInput.funny}
+          onChange={(e) => {
+            setFormInput((prevState) => ({
+              ...prevState,
+              funny: e.target.checked,
+            }));
+          }}
+        />
+        <Form.Check
+          className="text-black mb-3"
+          style={{ margin: '10px' }}
+          type="checkbox"
+          id="checkbox"
+          name="learning"
+          label="Learning"
+          checked={formInput.learning}
+          onChange={(e) => {
+            setFormInput((prevState) => ({
+              ...prevState,
+              learning: e.target.checked,
+            }));
+          }}
+        />
+        <Form.Check
+          className="text-black mb-3"
+          style={{ margin: '10px' }}
+          type="checkbox"
+          id="checkbox"
+          name="finance"
+          label="Finance"
+          checked={formInput.finance}
+          onChange={(e) => {
+            setFormInput((prevState) => ({
+              ...prevState,
+              finance: e.target.checked,
+            }));
+          }}
+        />
+        <Form.Check
+          className="text-black mb-3"
+          style={{ margin: '10px' }}
+          type="checkbox"
+          id="checkbox"
+          name="health"
+          label="Health"
+          checked={formInput.health}
+          onChange={(e) => {
+            setFormInput((prevState) => ({
+              ...prevState,
+              health: e.target.checked,
+            }));
+          }}
+        />
         <Button variant="primary" type="submit">
           Submit
         </Button>
       </Form>
-
     </>
   );
 };
@@ -109,6 +192,7 @@ PostForm.propTypes = {
     content: PropTypes.string,
     image_url: PropTypes.string,
     publication_date: PropTypes.string,
+    tags: PropTypes.bool,
   }),
 };
 

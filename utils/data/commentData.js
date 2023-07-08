@@ -65,8 +65,8 @@ const getUserForComments = (uid) => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
-const getCommentsByPostId = (postId) => new Promise((resolve, reject) => {
-  fetch(`${clientCredentials.databaseURL}/comments?postId=${postId}`, {
+const getCommentsByPostId = (id) => new Promise((resolve, reject) => {
+  fetch(`${clientCredentials.databaseURL}/comments?postId=${id}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
